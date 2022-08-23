@@ -70,15 +70,17 @@
                                 @if($a->type === 'income')
                                     @php
                                         $data['debit'] += ($a->amount * $a->currency_rate);
+                                        $data['balance'] += ($a->amount * $a->currency_rate);
                                         echo '<td>'.@money($a->amount, $a->currency_code, true).'</td><td></td>';
                                     @endphp
                                 @else
                                     @php
                                         $data['credit'] += ($a->amount * $a->currency_rate);
+                                        $data['balance'] -= ($a->amount * $a->currency_rate);
                                         echo '<td></td><td>'.@money($a->amount, $a->currency_code, true).'</td>';
                                     @endphp
                                 @endif
-                                <td>@money(($data['debit']-$data['credit']), setting('default.currency'), true)</td>
+                                <td>@money($data['balance'], setting('default.currency'), true)</td>
                             </tr>
                         @endforeach
                             <tr class="text-center text-white" style="background-color:{{ $data['color'] }} !important; -webkit-print-color-adjust: exact;">
@@ -86,7 +88,7 @@
                                 <td></td>
                                 <td>@money($data['debit'], setting('default.currency'), true)</td>
                                 <td>@money($data['credit'], setting('default.currency'), true)</td>
-                                <td>@money(($data['debit']-$data['credit']), setting('default.currency'), true)</td>
+                                <td>@money($data['balance'], setting('default.currency'), true)</td>
                             </tr>
                     </tbody>
                 </table>

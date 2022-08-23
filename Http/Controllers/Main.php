@@ -38,6 +38,7 @@ class Main extends Controller
             'closing'  => $getInfo['closing'],
             'debit'  => 0,
             'credit'  => 0,
+            'balance'  => $getInfo['opening'],
             'color'    => setting('invoice.color')
         ];
         return compact('data');
@@ -50,15 +51,17 @@ class Main extends Controller
         $query = Transaction::where('company_id', company_id())->where('account_id', $id)->where('paid_at', '<', date("Y-m-d",strtotime(setting('bank-statement.dateFrom'))) ." 23:59:59")->orderBy('paid_at', 'asc');
         $subQuery = $query->toSql();
         $opening = DB::select("select sum(if(type='expense', -1, 1) * amount * currency_rate) as opening from ($subQuery) as tbl", $query->getBindings());
+        $opening = ($opening[0]->opening ?? 0);
 
         $query = Transaction::where('company_id', company_id())->where('account_id', $id)->where('paid_at', '>=', date("Y-m-d",strtotime(setting('bank-statement.dateFrom'))) ." 00:00:00")->where('paid_at', '<=', date("Y-m-d",strtotime(setting('bank-statement.dateUntil'))) ." 23:59:59")->orderBy('paid_at', 'asc');
         $subQuery = $query->toSql();
         $closing = DB::select("select sum(if(type='expense', -1, 1) * amount * currency_rate) as closing from ($subQuery) as tbl", $query->getBindings());
-        
+        $closing = ($opening + ($closing[0]->closing ?? 0));
+
         $data = [
             'account'  => $account,
-            'opening'   => ($opening[0]->opening ?? 0),
-            'closing'   => ($closing[0]->closing ?? 0)
+            'opening'   => $opening,
+            'closing'   => $closing
         ];
 
         return $data;
