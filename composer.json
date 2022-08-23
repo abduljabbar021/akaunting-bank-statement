@@ -1,0 +1,19 @@
+{
+    "name": "airy3/akuanting-bank-statement",
+    "description": "An App/Module made to generate Bank Account Statements with Debit/Credit & Balance info etc",
+    "author":"Abdul Jabbar  ",
+    "require": {
+    },
+    "replace": {
+        "guzzlehttp/guzzle": "*",
+        "guzzlehttp/psr7": "*",
+        "laravel/framework": "*",
+        "omnipay/common": "*",
+        "symfony/http-foundation": "*"
+    },
+    "scripts": {
+        "test": [
+            "composer install --prefer-dist --no-interaction --no-scripts --no-suggest --no-progress --no-ansi"
+        ]
+    }
+}
