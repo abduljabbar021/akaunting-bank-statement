@@ -66,7 +66,7 @@
                         @foreach ($data['transactions'] as $key => $a)
                             <tr class="text-center">
                                 <td>@date($a->paid_at)</td>
-                                <td style="white-space: normal !important;">{{ $a->description.($a->document_number ? ' ('.$a->document_number.')' : '').($a->currency_rate != 1 ? ' ('.@money($a->amount, $a->currency_code, true).')' : '') }}</td>
+                                <td style="white-space: normal !important;">{{ $a->description.($a->document_number ? ' ('.$a->document_number.')' : '').($a->currency_rate != 1 ? ' (@money($a->amount, $a->currency_code, true))' : '') }}</td>
                                 @php
                                     $amount = ($a->amount * $a->currency_rate);
                                 @endphp
