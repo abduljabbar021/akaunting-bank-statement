@@ -66,18 +66,21 @@
                         @foreach ($data['transactions'] as $key => $a)
                             <tr class="text-center">
                                 <td>@date($a->paid_at)</td>
-                                <td style="white-space: normal !important;">{{ $a->description.($a->document_number ? ' ('.$a->document_number.')' : '').($a->currency_rate != 1 ? ' (c. rate '.$a->currency_rate.')' : '') }}</td>
+                                <td style="white-space: normal !important;">{{ $a->description.($a->document_number ? ' ('.$a->document_number.')' : '').($a->currency_rate != 1 ? ' ('.@money($a->amount, $a->currency_code, true).')' : '') }}</td>
+                                @php
+                                    $amount = ($a->amount * $a->currency_rate);
+                                @endphp
                                 @if($a->type === 'income')
                                     @php
-                                        $data['debit'] += ($a->amount * $a->currency_rate);
-                                        $data['balance'] += ($a->amount * $a->currency_rate);
-                                        echo '<td>'.@money($a->amount, $a->currency_code, true).'</td><td></td>';
+                                        $data['debit'] += $amount;
+                                        $data['balance'] += $amount;
+                                        echo '<td>'.@money($amount, setting('default.currency'), true).'</td><td></td>';
                                     @endphp
                                 @else
                                     @php
-                                        $data['credit'] += ($a->amount * $a->currency_rate);
-                                        $data['balance'] -= ($a->amount * $a->currency_rate);
-                                        echo '<td></td><td>'.@money($a->amount, $a->currency_code, true).'</td>';
+                                        $data['credit'] += $amount;
+                                        $data['balance'] -= $amount;
+                                        echo '<td></td><td>'.@money($amount, setting('default.currency'), true).'</td>';
                                     @endphp
                                 @endif
                                 <td>@money($data['balance'], setting('default.currency'), true)</td>
