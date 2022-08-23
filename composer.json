@@ -1,8 +1,14 @@
 {
     "name": "Airy3/Akaunting-Bank-Statement",
     "description": "An App/Module made to generate Bank Account Statements with Debit/Credit & Balance info etc",
-    "author":"Abdul Jabbar  ",
+    "author":[
+        {
+            "name" : "Abdul Jabbar",
+            "email" : "abduljabbar.airy3@gmail.com"
+        }
+    ],
     "require": {
+        "php" : ">=7.4"
     },
     "replace": {
         "guzzlehttp/guzzle": "*",
